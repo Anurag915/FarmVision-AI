@@ -1,0 +1,143 @@
+Price_Commodity,Standard_Crop,Match_Type
+Apple,Apple,Exact
+Arecanut (Betelnut/Supari),Arecanut,Exact
+Bajra (Pearl Millet/Cumbu),Bajra,Exact
+Banana,Banana,Exact
+Barley (Jau),Barley,Exact
+Ber (Zizyphus/Borehannu),Ber,Exact
+Bhindi (Ladies Finger),Bhindi,Exact
+Bitter gourd,Bitter Gourd,Exact
+Black pepper,Black Pepper,Exact
+Bottle gourd,Bottle Gourd,Exact
+Brinjal,Brinjal,Exact
+Cabbage,Cabbage,Exact
+Cardamom,Cardamom,Exact
+Carrot,Carrot,Exact
+Castor Seed,Castor Seed,Exact
+Cauliflower,Cauliflower,Exact
+Coconut,Coconut,Exact
+Coffee,Coffee,Exact
+Coriander (Leaves),Coriander,Exact
+Cotton,Cotton(Lint),Exact
+Cowpea (Lobia/Karamani),Cowpea(Lobia),Exact
+Cowpea (Veg),Cowpea(Lobia),Exact
+Dry Chillies,Dry Chillies,Exact
+Garlic,Garlic,Exact
+Ginger (Dry),Ginger,Exact
+Ginger (Green),Ginger,Exact
+Grapes,Grapes,Exact
+Groundnut,Groundnut,Exact
+Groundnut (Split),Groundnut,Exact
+Guar Seed (Cluster Beans Seed),Guar Seed,Exact
+Jack Fruit,Jack Fruit,Exact
+Jack Fruit (Ripe),Jack Fruit,Exact
+Jowar (Sorghum),Jowar,Exact
+Jute,Jute,Exact
+Lemon,Lemon,Exact
+Lentil (Masur)(Whole),Lentil,Exact
+Linseed,Linseed,Exact
+Litchi,Litchi,Exact
+Maize,Maize,Exact
+Mango,Mango,Exact
+Mango (Raw-Ripe),Mango,Exact
+Niger Seed (Ramtil),Niger Seed,Exact
+Onion,Onion,Exact
+Orange,Orange,Exact
+Paddy (Basmati),Paddy,Exact
+Paddy (Common),Paddy,Exact
+Paddy (Dhan)(Basmati),Paddy,Exact
+Paddy (Dhan)(Common),Paddy,Exact
+Papaya,Papaya,Exact
+Papaya (Raw),Papaya,Exact
+Peach,Peach,Exact
+Pear (Marasebu),Pear,Exact
+Peas (Dry),Peas  (Vegetable),Exact
+Pineapple,Pineapple,Exact
+Potato,Potato,Exact
+Ragi (Finger Millet),Ragi,Exact
+Rice,Rice,Exact
+Rubber,Rubber,Exact
+Safflower,Safflower,Exact
+"Sesamum (Sesame,Gingelly,Til)",Sesamum,Exact
+Soyabean,Soyabean,Exact
+Sugarcane,Sugarcane,Exact
+Sunflower,Sunflower,Exact
+Sweet Potato,Sweet Potato,Exact
+Tapioca,Tapioca,Exact
+Tea,Tea,Exact
+Tobacco,Tobacco,Exact
+Tomato,Tomato,Exact
+Turmeric,Turmeric,Exact
+Turmeric (raw),Turmeric,Exact
+Turnip,Turnip,Exact
+Water Melon,Water Melon,Exact
+Wheat,Wheat,Exact
+Yam,Yam,Exact
+Yam (Ratalu),Yam,Exact
+Alasande Gram,Gram,Fuzzy
+Ambady/Mesta,Mesta,Fuzzy
+Ambady/Mesta/Patson,Mesta,Fuzzy
+Arhar (Tur/Red Gram)(Whole),Arhar/Tur,Fuzzy
+Ashgourd,Ash Gourd,Fuzzy
+Banana - Green,Banana,Fuzzy
+Beans,Beans & Mutter(Vegetable),Fuzzy
+Beaten Rice,Rice,Fuzzy
+Beetroot,Beet Root,Fuzzy
+Bengal Gram (Gram)(Whole),Gram,Fuzzy
+Bengal Gram Dal (Chana Dal),Gram,Fuzzy
+Big Gram,Gram,Fuzzy
+Black Gram (Urd Beans)(Whole),Blackgram,Fuzzy
+Black Gram Dal (Urd Dal),Gram,Fuzzy
+Broken Rice,Rice,Fuzzy
+Bunch Beans,Bean,Fuzzy
+Cane,Sugarcane,Fuzzy
+Cardamoms,Cardamom,Fuzzy
+Cashewnuts,Cashewnut,Fuzzy
+Cluster beans,Bean,Fuzzy
+Coconut Oil,Coconut,Fuzzy
+Coconut Seed,Coconut,Fuzzy
+Corriander seed,Guar Seed,Fuzzy
+Cotton Seed,Cotton(Lint),Fuzzy
+Cow,Cowpea(Lobia),Fuzzy
+Cucumbar (Kheera),Cucumber,Fuzzy
+Custard Apple (Sharifa),Apple,Fuzzy
+Drumstick,Drum Stick,Fuzzy
+Dry Fodder,Other Dry Fruit,Fuzzy
+Dry Grapes,Grapes,Fuzzy
+Duster Beans,Bean,Fuzzy
+Elephant Yam (Suran),Yam,Fuzzy
+French Beans (Frasbean),Bean,Fuzzy
+Gram Raw (Chholia),Gram,Fuzzy
+Gramflour,Gram,Fuzzy
+Green Gram (Moong)(Whole),Gram,Fuzzy
+Green Gram Dal (Moong Dal),Gram,Fuzzy
+Green Peas,Peas  (Vegetable),Fuzzy
+Ground Nut Seed,Guar Seed,Fuzzy
+Groundnut pods (raw),Groundnut,Fuzzy
+Guar,Guar Seed,Fuzzy
+Indian Beans (Seam),Bean,Fuzzy
+Jute Seed,Jute,Fuzzy
+Kharif Mash,Other Kharif Pulses,Fuzzy
+Mash,Rajmash Kholar,Fuzzy
+Millets,Other Cereals & Millets,Fuzzy
+Mustard,Rapeseed &Mustard,Fuzzy
+Onion Green,Onion,Fuzzy
+Other Pulses,Other  Rabi Pulses,Fuzzy
+Other green and fresh vegetables,Cond-Spcs Other,Fuzzy
+Peas Wet,Peas  (Vegetable),Fuzzy
+Peas cod,Peas  (Vegetable),Fuzzy
+Plum,Plums,Fuzzy
+Pumpkin,Pump Kin,Fuzzy
+Ram,Blackgram,Fuzzy
+Red Gram,Gram,Fuzzy
+Snakeguard,Snak Guard,Fuzzy
+Sugar,Sugarcane,Fuzzy
+Sunflower Seed,Sunflower,Fuzzy
+Sunflower/Sunflower Seed,Sunflower,Fuzzy
+Surat Beans (Papadi),Bean,Fuzzy
+Tender Coconut,Coconut,Fuzzy
+Wheat Atta,Wheat,Fuzzy
+White Peas,Peas  (Vegetable),Fuzzy
+dried mango,Mango,Fuzzy
+liquor turmeric,Turmeric,Fuzzy
+mango powder,Mango,Fuzzy

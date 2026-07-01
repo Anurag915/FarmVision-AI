@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual Environment
+venv/
+.env/
+
+# VS Code
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# CatBoost
+catboost_info/
+
+# Python cache
+.pytest_cache/
+
+# Large datasets
+datasets/raw/
+datasets/cleaned/
+datasets/processed/
+datasets/merged/
+
+# Generated outputs
+outputs/predictions/
+
+# Model files
+models/*.pkl
+models/*.cbm
+
+# Keep reports and csv files
+!models/*.csv
