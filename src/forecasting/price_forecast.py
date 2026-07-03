@@ -8,14 +8,18 @@ import pandas as pd
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-print(ROOT)
 
-price = pd.read_csv(
-    ROOT / "datasets" / "modeling" / "price_features.csv"
-)
+# price = pd.read_csv(
+#     ROOT / "datasets" / "modeling" / "price_features.csv"
+# )
 
-price_model = joblib.load(
-    ROOT / "models" / "catboost_price_model.pkl"
+# price_model = joblib.load(
+#     ROOT / "models" / "catboost_price_model.pkl"
+# )
+
+from src.data.data_loader import (
+    price,
+    price_model
 )
 
 def get_price_history(state, crop):

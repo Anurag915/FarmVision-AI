@@ -9,12 +9,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-production = pd.read_csv(
-    ROOT / "datasets" / "processed" / "production_features.csv"
-)
+# production = pd.read_csv(
+#     ROOT / "datasets" / "processed" / "production_features.csv"
+# )
 
-production_model = joblib.load(
-    ROOT / "models" / "catboost_production.pkl"
+# production_model = joblib.load(
+#     ROOT / "models" / "catboost_production.pkl"
+# )
+
+from src.data.data_loader import (
+    production,
+    production_model
 )
 
 def get_production_history(
