@@ -1,8 +1,24 @@
-function StatCard({ title, value, icon, color }) {
-  return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition">
+import { motion } from "framer-motion";
 
-      <div className="flex justify-between items-center">
+function StatCard({
+  title,
+  value,
+  icon,
+  color,
+  trend,
+}) {
+  return (
+    <motion.div
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
+      className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6"
+    >
+      <div className="flex justify-between">
 
         <div>
 
@@ -10,21 +26,22 @@ function StatCard({ title, value, icon, color }) {
             {title}
           </p>
 
-          <h2 className="text-3xl font-bold mt-2">
+          <h2 className="text-4xl font-bold mt-3">
             {value}
           </h2>
 
+          <p className="mt-3 text-green-600 font-medium">
+            {trend}
+          </p>
+
         </div>
 
-        <div
-          className={`text-4xl ${color}`}
-        >
+        <div className={`text-5xl ${color}`}>
           {icon}
         </div>
 
       </div>
-
-    </div>
+    </motion.div>
   );
 }
 
