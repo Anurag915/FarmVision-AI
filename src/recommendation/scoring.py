@@ -1,8 +1,4 @@
-def normalize(
-    value,
-    min_value,
-    max_value
-):
+def normalize(value, min_value, max_value):
 
     if max_value == min_value:
         return 1.0
@@ -10,12 +6,7 @@ def normalize(
     return (value - min_value) / (max_value - min_value)
 
 
-
-def inverse_normalize(
-    value,
-    min_value,
-    max_value
-):
+def inverse_normalize(value, min_value, max_value):
 
     if max_value == min_value:
         return 1.0
@@ -56,10 +47,9 @@ def calculate_recommendation_score(
         score_limits["PriceCV_Max"]
     )
 
-    # Placeholder until we build a proper climate score
     climate_score = 1.0
 
-    recommendation_score = (
+    return (
 
         0.35 * revenue_score +
 
@@ -73,29 +63,31 @@ def calculate_recommendation_score(
 
     ) * 100
 
-    return recommendation_score
 
 def calculate_confidence(row):
 
-    if row["Years_Grown"] >= years_high:
+    years = row["Years_Grown"]
+
+    if years >= 15:
         return "High"
 
-    elif row["Years_Grown"] >= years_medium:
+    elif years >= 10:
         return "Medium"
 
     return "Low"
 
+
 def calculate_risk(row):
 
-    risk = (
+    risk_score = (
         row["Production_CV"] * 0.6 +
         row["Price_CV"] * 0.4
     )
 
-    if risk <= low_risk:
+    if risk_score <= 0.5:
         return "Low"
 
-    elif risk <= high_risk:
+    elif risk_score <= 0.8:
         return "Medium"
 
     return "High"

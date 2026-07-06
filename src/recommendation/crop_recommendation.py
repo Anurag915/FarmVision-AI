@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+
 from src.forecasting.price_forecast import forecast_prices
 
 from src.forecasting.production_forecast import forecast_production
@@ -470,7 +472,6 @@ def evaluate_all_crops(
     years
 ):
 
-    # Build statistics once
     crop_statistics = build_crop_statistics(
         state,
         district,
@@ -525,4 +526,77 @@ def evaluate_all_crops(
 
             print(f"Skipping {crop}: {e}")
 
-    return pd.DataFrame(results)
+    # ---------------------------------------
+    # Convert to DataFrame
+    # ---------------------------------------
+
+    results = pd.DataFrame(results)
+
+    if results.empty:
+        return results
+
+    # ---------------------------------------
+    # Score Crops
+    # ---------------------------------------
+
+    score_limits = {
+        "Revenue_Min": results["Average_Revenue"].min(),
+        "Revenue_Max": results["Average_Revenue"].max(),
+
+        "Years_Min": results["Years_Grown"].min(),
+        "Years_Max": results["Years_Grown"].max(),
+
+        "PriceCV_Min": results["Price_CV"].min(),
+        "PriceCV_Max": results["Price_CV"].max(),
+
+        "ProductionCV_Min": results["Production_CV"].min(),
+        "ProductionCV_Max": results["Production_CV"].max()
+    }
+
+    years_high = results["Years_Grown"].quantile(0.75)
+    years_medium = results["Years_Grown"].quantile(0.50)
+
+    risk_low = (
+        results["Production_CV"] * 0.6 + results["Price_CV"] * 0.4
+    ).quantile(0.33)
+
+    risk_high = (
+        results["Production_CV"] * 0.6 + results["Price_CV"] * 0.4
+    ).quantile(0.66)
+    
+    results["Recommendation_Score"] = results.apply(
+        calculate_recommendation_score,
+        axis=1,
+        score_limits=score_limits
+    )
+
+    results["Confidence"] = results.apply(
+        calculate_confidence,
+        axis=1
+    )
+
+    results["Risk"] = results.apply(
+        calculate_risk,
+        axis=1
+    )
+
+    results["Explanation"] = results.apply(
+        generate_explanation,
+        axis=1
+    )
+
+    # ---------------------------------------
+    # Sort
+    # ---------------------------------------
+
+    results = results.sort_values(
+        "Recommendation_Score",
+        ascending=False
+    ).reset_index(drop=True)
+
+    results["Rank"] = range(
+        1,
+        len(results) + 1
+    )
+
+    return results

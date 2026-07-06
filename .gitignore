@@ -39,3 +39,6 @@ models/*.cbm
 
 # Keep reports and csv files
 !models/*.csv
+
+
+frontend/node_modules
