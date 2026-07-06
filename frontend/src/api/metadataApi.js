@@ -1,5 +1,4 @@
-// Simulated API for Metadata since backend endpoints don't exist yet.
-// Replace these with actual axios calls when backend is ready.
+import api from "./axios";
 
 const MOCK_DATA = {
   states: ["Andhra Pradesh", "Punjab", "Bihar", "Maharashtra", "Uttar Pradesh"],
@@ -14,24 +13,46 @@ const MOCK_DATA = {
     "Kharif": ["Kharif"],
     "Rabi": ["Rabi"],
     "Zaid": ["Zaid"]
-  }
+  },
+  crops: ["Wheat", "Rice", "Maize", "Cotton", "Sugarcane"]
 };
 
 export const getStates = async () => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(MOCK_DATA.states), 300);
-  });
+  try {
+    const response = await api.get("/metadata/states");
+    return response.data.states || response.data;
+  } catch (error) {
+    console.warn("Using mock states data due to API error", error);
+    return MOCK_DATA.states;
+  }
 };
 
 export const getDistricts = async (state) => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(MOCK_DATA.districts[state] || []), 300);
-  });
+  try {
+    const response = await api.get(`/metadata/districts`, { params: { state } });
+    return response.data.districts || response.data;
+  } catch (error) {
+    console.warn(`Using mock districts data for ${state} due to API error`, error);
+    return MOCK_DATA.districts[state] || [];
+  }
 };
 
 export const getSeasons = async (state, district) => {
-  return new Promise((resolve) => {
-    // For now, returning all seasons regardless of state/district for simplicity in mock
-    setTimeout(() => resolve(["Kharif", "Rabi", "Whole Year"]), 300);
-  });
+  try {
+    const response = await api.get(`/metadata/seasons`, { params: { state, district } });
+    return response.data.seasons || response.data;
+  } catch (error) {
+    console.warn("Using mock seasons data due to API error", error);
+    return ["Kharif", "Rabi", "Whole Year"];
+  }
+};
+
+export const getCrops = async () => {
+  try {
+    const response = await api.get("/metadata/crops");
+    return response.data.crops || response.data;
+  } catch (error) {
+    console.warn("Using mock crops data due to API error", error);
+    return MOCK_DATA.crops;
+  }
 };

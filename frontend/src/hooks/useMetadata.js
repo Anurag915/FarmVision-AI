@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react";
-import { getStates, getDistricts, getSeasons } from "../api/metadataApi";
+import { getStates, getDistricts, getSeasons, getCrops } from "../api/metadataApi";
 
 function useMetadata(selectedState, selectedDistrict) {
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [seasons, setSeasons] = useState([]);
+  const [crops, setCrops] = useState([]);
 
   const [loadingStates, setLoadingStates] = useState(false);
   const [loadingDistricts, setLoadingDistricts] = useState(false);
   const [loadingSeasons, setLoadingSeasons] = useState(false);
+  const [loadingCrops, setLoadingCrops] = useState(false);
 
   const [error, setError] = useState(null);
 
-  // Load States on mount
+  // Load States and Crops on mount
   useEffect(() => {
     let mounted = true;
+    
     const fetchStates = async () => {
       setLoadingStates(true);
       try {
@@ -26,7 +29,22 @@ function useMetadata(selectedState, selectedDistrict) {
         if (mounted) setLoadingStates(false);
       }
     };
+
+    const fetchCrops = async () => {
+      setLoadingCrops(true);
+      try {
+        const data = await getCrops();
+        if (mounted) setCrops(data);
+      } catch (err) {
+        if (mounted) setError("Failed to load crops");
+      } finally {
+        if (mounted) setLoadingCrops(false);
+      }
+    };
+
     fetchStates();
+    fetchCrops();
+    
     return () => { mounted = false; };
   }, []);
 
@@ -80,7 +98,8 @@ function useMetadata(selectedState, selectedDistrict) {
     states,
     districts,
     seasons,
-    loading: loadingStates || loadingDistricts || loadingSeasons,
+    crops,
+    loading: loadingStates || loadingDistricts || loadingSeasons || loadingCrops,
     error,
   };
 }
