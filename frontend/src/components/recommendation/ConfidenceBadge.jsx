@@ -1,14 +1,14 @@
 function ConfidenceBadge({ confidence }) {
 
     const colors = {
-        High: "bg-blue-100 text-blue-700",
-        Medium: "bg-orange-100 text-orange-700",
-        Low: "bg-gray-100 text-gray-700"
+        High: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10",
+        Medium: "bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/20",
+        Low: "bg-gray-50 text-gray-600 ring-1 ring-inset ring-gray-500/10"
     };
 
     return (
         <span
-            className={`px-3 py-1 rounded-full text-sm font-semibold ${colors[confidence]}`}
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${colors[confidence]}`}
         >
             {confidence}
         </span>
