@@ -33,12 +33,11 @@ datasets/merged/
 # Generated outputs
 outputs/predictions/
 
-# Model files
-models/*.pkl
-models/*.cbm
-
 # Keep reports and csv files
 !models/*.csv
 
 
-frontend/node_modules
+frontend/node_modules/
+frontend/dist/
+
+frontend/.env
