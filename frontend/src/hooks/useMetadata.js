@@ -1,7 +1,20 @@
-import { useState, useEffect } from "react";
-import { getStates, getDistricts, getSeasons, getCrops } from "../api/metadataApi";
+import { useState, useEffect, useCallback } from "react";
+import { 
+  getStates, 
+  getDistricts, 
+  getSeasons, 
+  getRecommendationCrops, 
+  getPriceCrops 
+} from "../services/metadataService";
 
-function useMetadata(selectedState, selectedDistrict) {
+/**
+ * useMetadata
+ * @param {string} moduleType - 'recommendation' or 'price'
+ * @param {string} selectedState
+ * @param {string} selectedDistrict
+ * @param {string} selectedSeason
+ */
+function useMetadata(moduleType = 'recommendation', selectedState = "", selectedDistrict = "", selectedSeason = "") {
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [seasons, setSeasons] = useState([]);
@@ -14,93 +27,143 @@ function useMetadata(selectedState, selectedDistrict) {
 
   const [error, setError] = useState(null);
 
-  // Load States and Crops on mount
-  useEffect(() => {
-    let mounted = true;
-    
-    const fetchStates = async () => {
-      setLoadingStates(true);
-      try {
-        const data = await getStates();
-        if (mounted) setStates(data);
-      } catch (err) {
-        if (mounted) setError("Failed to load states");
-      } finally {
-        if (mounted) setLoadingStates(false);
-      }
-    };
-
-    const fetchCrops = async () => {
-      setLoadingCrops(true);
-      try {
-        const data = await getCrops();
-        if (mounted) setCrops(data);
-      } catch (err) {
-        if (mounted) setError("Failed to load crops");
-      } finally {
-        if (mounted) setLoadingCrops(false);
-      }
-    };
-
-    fetchStates();
-    fetchCrops();
-    
-    return () => { mounted = false; };
+  const fetchStates = useCallback(async (force = false) => {
+    setLoadingStates(true);
+    setError(null);
+    try {
+      const data = await getStates(force);
+      setStates(data || []);
+    } catch (err) {
+      console.error("Failed to fetch states:", err);
+      setError("Unable to load states.");
+    } finally {
+      setLoadingStates(false);
+    }
   }, []);
 
-  // Load Districts when state changes
+  // 1. Fetch States on Mount
+  useEffect(() => {
+    fetchStates();
+  }, [fetchStates]);
+
+  // 2. Fetch Districts (and Price Crops if applicable) when State changes
   useEffect(() => {
     let mounted = true;
+
     if (!selectedState) {
       setDistricts([]);
+      if (moduleType === 'price') setCrops([]);
       return;
     }
 
-    const fetchDistricts = async () => {
-      setLoadingDistricts(true);
-      try {
-        const data = await getDistricts(selectedState);
-        if (mounted) setDistricts(data);
-      } catch (err) {
-        if (mounted) setError("Failed to load districts");
-      } finally {
-        if (mounted) setLoadingDistricts(false);
+    const fetchStateDependencies = async () => {
+      setError(null);
+
+      // Fetch Districts for Recommendation/Production modules
+      if (moduleType !== 'price') {
+        setLoadingDistricts(true);
+        try {
+          const data = await getDistricts(selectedState);
+          if (mounted) setDistricts(data || []);
+        } catch (err) {
+          if (mounted) setError("Unable to load districts.");
+        } finally {
+          if (mounted) setLoadingDistricts(false);
+        }
+      }
+
+      // Fetch Price Crops for Price module
+      if (moduleType === 'price') {
+        setLoadingCrops(true);
+        try {
+          const data = await getPriceCrops(selectedState);
+          if (mounted) setCrops(data || []);
+        } catch (err) {
+          if (mounted) setError("Unable to load crops.");
+        } finally {
+          if (mounted) setLoadingCrops(false);
+        }
       }
     };
-    fetchDistricts();
-    return () => { mounted = false; };
-  }, [selectedState]);
 
-  // Load Seasons when district changes
+    fetchStateDependencies();
+
+    return () => { mounted = false; };
+  }, [selectedState, moduleType]);
+
+  // 3. Fetch Seasons when District changes (Only for non-price modules)
   useEffect(() => {
     let mounted = true;
+    if (moduleType === 'price') return;
+
     if (!selectedState || !selectedDistrict) {
       setSeasons([]);
       return;
     }
 
-    const fetchSeasons = async () => {
+    const fetchSeasonData = async () => {
       setLoadingSeasons(true);
+      setError(null);
       try {
         const data = await getSeasons(selectedState, selectedDistrict);
-        if (mounted) setSeasons(data);
+        if (mounted) setSeasons(data || []);
       } catch (err) {
-        if (mounted) setError("Failed to load seasons");
+        if (mounted) setError("Unable to load seasons.");
       } finally {
         if (mounted) setLoadingSeasons(false);
       }
     };
-    fetchSeasons();
+
+    fetchSeasonData();
+
     return () => { mounted = false; };
-  }, [selectedState, selectedDistrict]);
+  }, [selectedState, selectedDistrict, moduleType]);
+
+  // 4. Fetch Recommendation Crops when Season changes
+  useEffect(() => {
+    let mounted = true;
+    if (moduleType === 'price') return;
+
+    if (!selectedState || !selectedDistrict || !selectedSeason) {
+      setCrops([]);
+      return;
+    }
+
+    const fetchCropData = async () => {
+      setLoadingCrops(true);
+      setError(null);
+      try {
+        const data = await getRecommendationCrops(selectedState, selectedDistrict, selectedSeason);
+        if (mounted) setCrops(data || []);
+      } catch (err) {
+        if (mounted) setError("Unable to load crops.");
+      } finally {
+        if (mounted) setLoadingCrops(false);
+      }
+    };
+
+    fetchCropData();
+
+    return () => { mounted = false; };
+  }, [selectedState, selectedDistrict, selectedSeason, moduleType]);
+
+  // Aggregate loading state
+  const loading = loadingStates || loadingDistricts || loadingSeasons || loadingCrops;
+
+  const retry = () => {
+    if (states.length === 0) {
+      fetchStates(true);
+    }
+  };
 
   return {
     states,
     districts,
     seasons,
     crops,
-    loading: loadingStates || loadingDistricts || loadingSeasons || loadingCrops,
+    loading,
     error,
+    retry,
   };
 }
 

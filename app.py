@@ -7,13 +7,16 @@ from routes import (
     recommendation_bp
 )
 
+from routes.metadata import metadata_bp
+
+
 app = Flask(__name__)
 CORS(app)
 
 app.register_blueprint(price_bp)
 app.register_blueprint(production_bp)
 app.register_blueprint(recommendation_bp)
-
+app.register_blueprint(metadata_bp)
 
 @app.get("/")
 def home():
