@@ -1,6 +1,6 @@
 import api from "./axios";
 
-export const getProductionForecast = async (data)=>{
-    const response = await api.post("/production/predict",data);
-    return response.data;       
+export const getProductionForecast = async (payload) => {
+  const response = await api.post("/production/predict", payload);
+  return response.data;
 };

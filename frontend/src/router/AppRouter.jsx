@@ -6,7 +6,7 @@ import PriceForecast from "../pages/PriceForecast";
 import ProductionForecast from "../pages/ProductionForecast";
 import AIModels from "../pages/AIModels";
 import About from "../pages/About";
-import Analytics from "../pages/Analytics";
+import AnalyticsDashboard from "../pages/AnalyticsDashboard";
 
 
 function AppRouter(){
@@ -18,7 +18,7 @@ function AppRouter(){
             <Route path="/production" element={<ProductionForecast/>}/>
             <Route path="/models" element={<AIModels/>}/>
             <Route path="/about" element={<About/>}/>
-            <Route path="/analytics" element={<Analytics/>}/>
+            <Route path="/analytics" element={<AnalyticsDashboard/>}/>
         </Routes>   
     )
 }
