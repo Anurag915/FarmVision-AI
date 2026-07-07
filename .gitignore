@@ -27,8 +27,19 @@ catboost_info/
 # Large datasets
 datasets/raw/
 datasets/cleaned/
-datasets/processed/
 datasets/merged/
+
+# Ignore everything in processed
+datasets/processed/*
+
+# Keep only deployment file
+!datasets/processed/production_features.csv
+
+# Ignore everything in modeling
+datasets/modeling/*
+
+# Keep only deployment file
+!datasets/modeling/price_features.csv
 
 # Generated outputs
 outputs/predictions/

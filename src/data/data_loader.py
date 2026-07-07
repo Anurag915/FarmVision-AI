@@ -27,7 +27,7 @@ production_model = joblib.load(
 )
 
 
-monthly_weather = pd.read_csv(
-    ROOT / "datasets" / "processed" / "weather_monthly.csv"
-)
+# monthly_weather = pd.read_csv(
+#     ROOT / "datasets" / "processed" / "state_monthly_weather.csv"
+# )
 

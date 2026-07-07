@@ -14,8 +14,7 @@ from src.recommendation.scoring import (
 
 from src.data.data_loader import (
     price,
-    production,
-    monthly_weather
+    production
 )
 
 
