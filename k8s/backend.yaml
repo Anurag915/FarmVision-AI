@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/anurag915/farmvision-ai-api@sha256:d92145660205b9371ff35d7c17a44d63a529a20a7fe27466eeb7185efeda000b
+          image: ghcr.io/anurag915/farmvision-ai-api@sha256:1996a65b2a51c4085d7cfc7560ca7438dc420aa0bbf4b2dc221f3596a5ab6f52
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000

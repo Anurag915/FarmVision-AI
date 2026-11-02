@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/anurag915/farmvision-ai-web@sha256:fcefd7471c19ca63d313ed71f7e22d1794c7069e6688a5e203a4b47a4c96f9c8
+          image: ghcr.io/anurag915/farmvision-ai-web@sha256:442c337ed68529aea7ffe9fcad53459d16958adb7cbf9da595f215fa980a3841
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
