@@ -1,0 +1,145 @@
+name: Build images and propose deployment
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app.py'
+      - 'src/**'
+      - 'routes/**'
+      - 'models/**'
+      - 'datasets/modeling/price_features.csv'
+      - 'datasets/processed/production_features.csv'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'requirements-api.txt'
+      - 'frontend/**'
+      - 'scripts/update_deployment_images.py'
+      - '.github/workflows/publish-images.yaml'
+  workflow_dispatch:
+
+# Serialize updates to the shared deployment PR branch.
+concurrency:
+  group: publish-agriculture-images
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_SHA: ${{ github.sha }}
+      REPOSITORY: ${{ github.repository }}
+      REGISTRY_USER: ${{ github.actor }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Name images
+        shell: bash
+        run: |
+          set -euo pipefail
+          prefix="ghcr.io/${REPOSITORY,,}"
+          echo "API_IMAGE=${prefix}-api:${SOURCE_SHA}" >> "$GITHUB_ENV"
+          echo "WEB_IMAGE=${prefix}-web:${SOURCE_SHA}" >> "$GITHUB_ENV"
+
+      - name: Build both application images
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build --label "org.opencontainers.image.source=https://github.com/$REPOSITORY" -t "$API_IMAGE" .
+          docker build --label "org.opencontainers.image.source=https://github.com/$REPOSITORY" -t "$WEB_IMAGE" frontend
+
+      - name: Check backend startup and prediction paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -i --entrypoint python "$API_IMAGE" - <<'PY'
+          from app import app
+          client = app.test_client()
+          for path in ('/', '/api/metadata/states'):
+              response = client.get(path)
+              assert response.status_code == 200, (path, response.get_data(as_text=True))
+          cases = [
+              ('/api/price/predict', dict(state='Andaman And Nicobar Islands', crop='Banana', start_year=2027, start_month=1, months=1)),
+              ('/api/production/predict', dict(state='Andaman And Nicobar Islands', district='South Andamans', crop='Arecanut', season='Whole Year', area=100, start_year=2027, years=1)),
+          ]
+          for path, payload in cases:
+              response = client.post(path, json=payload)
+              assert response.status_code == 200, (path, response.get_data(as_text=True))
+              assert response.json['total_predictions'] == 1, response.json
+          print('Backend startup, metadata, and both prediction paths passed.')
+          PY
+
+      - name: Check frontend serving and API proxy
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker network create ci-check
+          trap 'docker rm -f ci-web ci-api >/dev/null 2>&1 || true; docker network rm ci-check >/dev/null 2>&1 || true' EXIT
+          docker run -d --name ci-api --network ci-check --network-alias backend "$API_IMAGE"
+          docker run -d --name ci-web --network ci-check -p 127.0.0.1:8080:80 "$WEB_IMAGE"
+          curl --fail --retry 20 --retry-all-errors --retry-delay 2 http://127.0.0.1:8080/ -o /dev/null
+          curl --fail --retry 20 --retry-all-errors --retry-delay 2 http://127.0.0.1:8080/api/metadata/states -o /dev/null
+
+      - name: Publish to GitHub Container Registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+          docker push "$API_IMAGE"
+          docker push "$WEB_IMAGE"
+          echo "API_REF=$(docker image inspect --format '{{index .RepoDigests 0}}' "$API_IMAGE")" >> "$GITHUB_ENV"
+          echo "WEB_REF=$(docker image inspect --format '{{index .RepoDigests 0}}' "$WEB_IMAGE")" >> "$GITHUB_ENV"
+
+      - name: Open or update the deployment PR
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          if [ "$(git rev-parse origin/main)" != "$SOURCE_SHA" ]; then
+            echo 'main changed during the build. Images were published; rerun on current main to propose deployment.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          branch=codex/deploy-images
+          # Establish the expected remote branch state for force-with-lease.
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            git fetch origin "$branch:refs/remotes/origin/$branch"
+          fi
+          git switch -C "$branch" origin/main
+          python scripts/update_deployment_images.py --api "$API_REF" --web "$WEB_REF"
+          git add k8s/backend.yaml k8s/frontend.yaml
+          if git diff --cached --quiet; then
+            echo 'Deployment already references these images.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Deploy images built from $SOURCE_SHA"
+          git push --force-with-lease origin "HEAD:$branch"
+          body_file=$(mktemp)
+          cat > "$body_file" <<EOF
+          Deploy the application images built and checked from source commit $SOURCE_SHA.
+
+          Backend: $API_REF
+          Frontend: $WEB_REF
+
+          Validation: both Docker builds, backend startup/metadata and prediction smoke checks, frontend HTTP serving and API proxy checks.
+
+          Before the first merge, make both GHCR packages public or configure Kubernetes imagePullSecrets. Merging updates the manifests watched by Argo CD.
+          EOF
+          pr_number=$(gh pr list --repo "$REPOSITORY" --head "$branch" --base main --state open --json number --jq '.[0].number // empty')
+          if [ -n "$pr_number" ]; then
+            gh pr edit "$pr_number" --repo "$REPOSITORY" --title 'Deploy latest application images' --body-file "$body_file"
+          else
+            gh pr create --repo "$REPOSITORY" --base main --head "$branch" --title 'Deploy latest application images' --body-file "$body_file"
+          fi
+          echo 'Deployment PR created or updated. Review it before merging.' >> "$GITHUB_STEP_SUMMARY"
