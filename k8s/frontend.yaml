@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: agriculture-web:local
-          imagePullPolicy: Never
+          image: ghcr.io/anurag915/farmvision-ai-web@sha256:cbf78965747b2fe1960312567581ec79b18cdc79e533768deaadf08b4ca05a3e
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           readinessProbe:
