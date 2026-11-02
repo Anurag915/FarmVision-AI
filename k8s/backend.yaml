@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: backend
-          image: agriculture-api:local
-          imagePullPolicy: Never
+          image: ghcr.io/anurag915/farmvision-ai-api@sha256:6cda80f16905d1ad3a76111a00b62d81d608f29933bf1a304aa196976541dfea
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           readinessProbe:
