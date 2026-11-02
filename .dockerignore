@@ -1,0 +1,21 @@
+# Only send files required by the backend image to Docker.
+**
+!Dockerfile
+!requirements-api.txt
+!app.py
+!routes/
+!routes/**
+!src/
+!src/**
+!models/
+!models/catboost_price_model.pkl
+!models/catboost_production.pkl
+!datasets/
+!datasets/modeling/
+!datasets/modeling/price_features.csv
+!datasets/processed/
+!datasets/processed/production_features.csv
+**/__pycache__/
+**/*.pyc
+**/.env
+**/.env.*

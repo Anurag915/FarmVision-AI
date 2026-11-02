@@ -1,0 +1,75 @@
+crop:
+  id: 1
+  name: Rice
+  scientific_name: Oryza sativa
+  category: Cereal
+  type: Annual
+
+profile:
+  duration_days: 120
+  water_requirement: High
+  water_requirement_mm: 1200
+  root_depth: Shallow
+  risk_level: Medium
+  storage_life_days: 365
+  market_demand: High
+
+climate:
+  temperature:
+    min: 20      # °C
+    max: 35      # °C
+
+  rainfall:
+    min: 1000    # mm/season
+    max: 2000    # mm/season
+
+  humidity:
+    min: 60      # %
+    max: 80      # %
+
+soil:
+  suitable:
+    - Clay
+    - Clay Loam
+    - Silty Clay Loam
+    - Alluvial
+
+  preferred_ph:
+    min: 5.5
+    max: 7.5
+
+fertilizer:
+  nitrogen: 120                     # kg/ha
+  phosphorus: 40                    # kg/ha (P₂O₅)
+  potassium: 40                     # kg/ha (K₂O)
+  organic_manure: 7.5               # t/ha
+
+calendar:
+  season:
+    - Kharif
+    - Rabi
+
+  sowing:
+    start: June
+    end: July
+
+  harvest:
+    start: October
+    end: November
+
+market:
+  msp: true
+  export_potential: High
+  demand: High
+  price_volatility: Medium
+  storage: Easy
+
+sources:
+  - name: Tamil Nadu Agricultural University (TNAU)
+    type: University Crop Guide
+
+  - name: ICAR - Indian Institute of Rice Research
+    type: Research Institute
+
+  - name: FAO Crop Water Information
+    type: International Organization

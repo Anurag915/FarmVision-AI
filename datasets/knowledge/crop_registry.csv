@@ -1,0 +1,51 @@
+Crop_ID,Crop_Name,Scientific_Name,Crop_Category,Crop_Type
+1,Rice,Oryza sativa,Cereal,Annual
+2,Wheat,Triticum aestivum,Cereal,Annual
+3,Maize,Zea mays,Cereal,Annual
+4,Pearl Millet (Bajra),Pennisetum glaucum,Cereal,Annual
+5,Sorghum (Jowar),Sorghum bicolor,Cereal,Annual
+6,Finger Millet (Ragi),Eleusine coracana,Cereal,Annual
+7,Barley,Hordeum vulgare,Cereal,Annual
+8,Pigeon Pea (Arhar/Tur),Cajanus cajan,Pulse,Annual
+9,Green Gram (Moong),Vigna radiata,Pulse,Annual
+10,Black Gram (Urad),Vigna mungo,Pulse,Annual
+11,Chickpea (Gram),Cicer arietinum,Pulse,Annual
+12,Lentil (Masoor),Lens culinaris,Pulse,Annual
+13,Field Pea,Pisum sativum,Pulse,Annual
+14,Horse Gram,Macrotyloma uniflorum,Pulse,Annual
+15,Cowpea,Vigna unguiculata,Pulse,Annual
+16,Groundnut,Arachis hypogaea,Oilseed,Annual
+17,Soybean,Glycine max,Oilseed,Annual
+18,Mustard,Brassica juncea,Oilseed,Annual
+19,Sunflower,Helianthus annuus,Oilseed,Annual
+20,Sesame,Sesamum indicum,Oilseed,Annual
+21,Castor,Ricinus communis,Oilseed,Annual
+22,Safflower,Carthamus tinctorius,Oilseed,Annual
+23,Niger,Guizotia abyssinica,Oilseed,Annual
+24,Cotton,Gossypium hirsutum,Fiber,Annual
+25,Jute,Corchorus olitorius,Fiber,Annual
+26,Mesta,Hibiscus cannabinus,Fiber,Annual
+27,Sunn Hemp,Crotalaria juncea,Fiber,Annual
+28,Sugarcane,Saccharum officinarum,Sugar Crop,Perennial
+29,Tea,Camellia sinensis,Plantation,Perennial
+30,Coffee,Coffea arabica,Plantation,Perennial
+31,Coconut,Cocos nucifera,Plantation,Perennial
+32,Arecanut,Areca catechu,Plantation,Perennial
+33,Onion,Allium cepa,Vegetable,Annual
+34,Potato,Solanum tuberosum,Vegetable,Annual
+35,Tomato,Solanum lycopersicum,Vegetable,Annual
+36,Brinjal (Eggplant),Solanum melongena,Vegetable,Annual
+37,Okra,Abelmoschus esculentus,Vegetable,Annual
+38,Cabbage,Brassica oleracea var. capitata,Vegetable,Annual
+39,Cauliflower,Brassica oleracea var. botrytis,Vegetable,Annual
+40,Green Chilli,Capsicum annuum,Vegetable,Annual
+41,Garlic,Allium sativum,Vegetable,Annual
+42,Ginger,Zingiber officinale,Vegetable,Perennial
+43,Dry Chilli,Capsicum annuum,Spice,Annual
+44,Turmeric,Curcuma longa,Spice,Perennial
+45,Coriander,Coriandrum sativum,Spice,Annual
+46,Cumin,Cuminum cyminum,Spice,Annual
+47,Fenugreek,Trigonella foenum-graecum,Spice,Annual
+48,Black Pepper,Piper nigrum,Spice,Perennial
+49,Cardamom,Elettaria cardamomum,Spice,Perennial
+50,Fennel,Foeniculum vulgare,Spice,Annual

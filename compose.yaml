@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: .
+    image: agriculture-api:local
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 30s
+
+  frontend:
+    build: ./frontend
+    image: agriculture-web:local
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy

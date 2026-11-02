@@ -1,0 +1,384 @@
+# ==========================================================
+# HarvestIQ Knowledge Schema
+# Version: 2.0
+# ==========================================================
+
+schema:
+  name: HarvestIQ Crop Knowledge Schema
+  version: "2.0"
+  description: Master schema for validating crop knowledge files and generating structured datasets.
+
+# ==========================================================
+# ENUM DEFINITIONS
+# ==========================================================
+
+enums:
+
+  crop_category:
+    values:
+      - Cereal
+      - Pulse
+      - Oilseed
+      - Vegetable
+      - Fruit
+      - Fiber
+      - Plantation
+      - Spice
+      - Sugar Crop
+
+  crop_type:
+    values:
+      - Annual
+      - Biennial
+      - Perennial
+
+  water_requirement:
+    values:
+      - Low
+      - Medium
+      - High
+
+  root_depth:
+    values:
+      - Shallow
+      - Medium
+      - Deep
+
+  risk_level:
+    values:
+      - Low
+      - Medium
+      - High
+
+  market_demand:
+    values:
+      - Low
+      - Medium
+      - High
+
+  export_potential:
+    values:
+      - Low
+      - Medium
+      - High
+
+  price_volatility:
+    values:
+      - Low
+      - Medium
+      - High
+
+  storage_facility:
+    values:
+      - Easy
+      - Moderate
+      - Difficult
+
+  season:
+    values:
+      - Kharif
+      - Rabi
+      - Zaid
+      - Summer
+      - Winter
+      - Multi-season
+
+  month:
+    values:
+      - January
+      - February
+      - March
+      - April
+      - May
+      - June
+      - July
+      - August
+      - September
+      - October
+      - November
+      - December
+
+# ==========================================================
+# FIELD DEFINITIONS
+# ==========================================================
+
+sections:
+
+  crop:
+
+    id:
+      type: integer
+      required: true
+      minimum: 1
+      csv: crop_registry.csv
+      column: Crop_ID
+
+    name:
+      type: string
+      required: true
+      csv: crop_registry.csv
+      column: Crop_Name
+
+    scientific_name:
+      type: string
+      required: true
+      csv: crop_registry.csv
+      column: Scientific_Name
+
+    category:
+      type: enum
+      required: true
+      enum: crop_category
+      csv: crop_registry.csv
+      column: Crop_Category
+
+    type:
+      type: enum
+      required: true
+      enum: crop_type
+      csv: crop_registry.csv
+      column: Crop_Type
+
+  profile:
+
+    duration_days:
+      type: integer
+      required: true
+      minimum: 30
+      maximum: 730
+      unit: days
+      csv: crop_profiles.csv
+      column: Crop_Duration_Days
+
+    water_requirement:
+      type: enum
+      required: true
+      enum: water_requirement
+      csv: crop_profiles.csv
+      column: Water_Requirement
+
+    water_requirement_mm:
+      type: integer
+      required: true
+      minimum: 100
+      maximum: 5000
+      unit: mm/season
+      csv: crop_profiles.csv
+      column: Water_Requirement_mm
+
+    root_depth:
+      type: enum
+      required: true
+      enum: root_depth
+      csv: crop_profiles.csv
+      column: Root_Depth
+
+    risk_level:
+      type: enum
+      required: true
+      enum: risk_level
+      csv: crop_profiles.csv
+      column: Risk_Level
+
+    storage_life_days:
+      type: integer
+      required: true
+      minimum: 1
+      maximum: 3650
+      unit: days
+      csv: crop_profiles.csv
+      column: Storage_Life_Days
+
+    market_demand:
+      type: enum
+      required: true
+      enum: market_demand
+      csv: crop_profiles.csv
+      column: Market_Demand
+
+  climate:
+
+    temperature:
+
+      minimum:
+        type: float
+        required: true
+        unit: °C
+        minimum: -10
+        maximum: 60
+
+      maximum:
+        type: float
+        required: true
+        unit: °C
+        minimum: -10
+        maximum: 60
+
+    rainfall:
+
+      minimum:
+        type: integer
+        required: true
+        unit: mm/season
+        minimum: 0
+        maximum: 10000
+
+      maximum:
+        type: integer
+        required: true
+        unit: mm/season
+        minimum: 0
+        maximum: 10000
+
+    humidity:
+
+      minimum:
+        type: integer
+        required: true
+        unit: "%"
+        minimum: 0
+        maximum: 100
+
+      maximum:
+        type: integer
+        required: true
+        unit: "%"
+        minimum: 0
+        maximum: 100
+
+  soil:
+
+    suitable:
+      type: list
+      required: true
+      unique: true
+      minimum_items: 1
+
+    preferred_ph:
+
+      minimum:
+        type: float
+        required: true
+        minimum: 0
+        maximum: 14
+
+      maximum:
+        type: float
+        required: true
+        minimum: 0
+        maximum: 14
+
+  fertilizer:
+
+    nitrogen:
+      type: integer
+      required: true
+      unit: kg/ha
+      minimum: 0
+      maximum: 500
+
+    phosphorus:
+      type: integer
+      required: true
+      unit: kg/ha
+      minimum: 0
+      maximum: 500
+
+    potassium:
+      type: integer
+      required: true
+      unit: kg/ha
+      minimum: 0
+      maximum: 500
+
+    organic_manure:
+      type: float
+      required: true
+      unit: t/ha
+      minimum: 0
+      maximum: 100
+
+  calendar:
+
+    season:
+      type: list
+      required: true
+      enum: season
+
+    sowing:
+
+      start:
+        type: enum
+        enum: month
+        required: true
+
+      end:
+        type: enum
+        enum: month
+        required: true
+
+    harvest:
+
+      start:
+        type: enum
+        enum: month
+        required: true
+
+      end:
+        type: enum
+        enum: month
+        required: true
+
+  market:
+
+    msp:
+      type: boolean
+      required: true
+
+    export_potential:
+      type: enum
+      enum: export_potential
+      required: true
+
+    demand:
+      type: enum
+      enum: market_demand
+      required: true
+
+    price_volatility:
+      type: enum
+      enum: price_volatility
+      required: true
+
+    storage:
+      type: enum
+      enum: storage_facility
+      required: true
+
+  sources:
+
+    type: list
+    required: true
+    minimum_items: 1
+
+    item:
+
+      name:
+        type: string
+        required: true
+
+      type:
+        type: string
+        required: true
+
+      url:
+        type: string
+        required: false
+
+      year:
+        type: integer
+        required: false
+
+      notes:
+        type: string
+        required: false
