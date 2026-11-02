@@ -66,3 +66,18 @@ or your own feature branches, not on the bot branch.
 Revert a merged deployment PR to restore its previous image references, provided
 those images remain available. The first deployment's previous references are
 local-only images, so that first rollback only works on this learning cluster.
+
+## GHCR reports unknown blob during publishing
+
+Login can succeed and several layers can upload before GHCR rejects a push with
+`unknown blob`. This points to a missing blob during registry publication, not a
+Kubernetes rollout failure. The precise registry-side cause is not established
+by that message alone. The workflow retries this specific error up to four times
+with increasing delays, and still fails if publishing cannot complete. Other
+push errors fail immediately. Neither manifest is updated unless both pushes
+succeed and valid digest references are available.
+
+After pushing a workflow fix, use the new workflow run on main. Re-running an
+older failed run uses its older workflow definition. If all retries fail, retain
+the logs and investigate registry status and Docker/registry compatibility rather
+than deleting packages or changing credentials without evidence.

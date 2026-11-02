@@ -95,10 +95,35 @@ jobs:
         run: |
           set -euo pipefail
           printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
-          docker push "$API_IMAGE"
-          docker push "$WEB_IMAGE"
-          echo "API_REF=$(docker image inspect --format '{{index .RepoDigests 0}}' "$API_IMAGE")" >> "$GITHUB_ENV"
-          echo "WEB_REF=$(docker image inspect --format '{{index .RepoDigests 0}}' "$WEB_IMAGE")" >> "$GITHUB_ENV"
+          push_image() {
+            local image="$1" attempt log_file
+            log_file=$(mktemp)
+            for attempt in 1 2 3 4; do
+              if docker push "$image" 2>&1 | tee "$log_file"; then
+                rm -f "$log_file"
+                return 0
+              fi
+              # Retry the registry's missing-blob error; fail other errors directly.
+              if ! grep -qi 'unknown blob\|blob unknown' "$log_file"; then
+                rm -f "$log_file"
+                return 1
+              fi
+              if [ "$attempt" -lt 4 ]; then
+                echo "::warning::GHCR returned unknown blob for $image; retrying push ($attempt/4)."
+                sleep "$((attempt * 10))"
+              fi
+            done
+            echo "::error::GHCR still rejects $image after four push attempts."
+            rm -f "$log_file"
+            return 1
+          }
+          push_image "$API_IMAGE"
+          push_image "$WEB_IMAGE"
+          api_ref=$(docker image inspect --format '{{index .RepoDigests 0}}' "$API_IMAGE")
+          web_ref=$(docker image inspect --format '{{index .RepoDigests 0}}' "$WEB_IMAGE")
+          [[ "$api_ref" =~ ^ghcr.io/.+@sha256:[0-9a-f]{64}$ ]]
+          [[ "$web_ref" =~ ^ghcr.io/.+@sha256:[0-9a-f]{64}$ ]]
+          printf 'API_REF=%s\nWEB_REF=%s\n' "$api_ref" "$web_ref" >> "$GITHUB_ENV"
 
       - name: Open or update the deployment PR
         shell: bash
