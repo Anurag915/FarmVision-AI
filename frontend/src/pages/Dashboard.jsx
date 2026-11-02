@@ -18,7 +18,7 @@ function Dashboard() {
   return (
     <>
       <PageHeader
-        title="Dashboards"
+        title="Dashboard"
         description="Overview of AI Agriculture Decision Support System."
       />
 
